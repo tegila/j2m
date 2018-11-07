@@ -1,0 +1,14 @@
+{
+  type: "find",
+  database: "__auth__",
+  collection: "Profiles",
+  query: {},
+  filter: { 
+    _id: 1 
+  },
+  skip: 0,
+  sort: { 
+    _id: -1
+  },
+  limit: 1
+}
