@@ -3,8 +3,7 @@
   "database": "__auth__",
   "collection": "Profiles",
   "query": {},
-  "filter": { 
-    "_id": 1 
+  "filter": {
   },
   "skip": 0,
   "sort": { 

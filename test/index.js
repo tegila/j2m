@@ -1,6 +1,5 @@
 const j2m = require('../index.js');
-const test1 = require('test1.json');
-
+const test1 = require('./test1.json');
 // this is test one:
 // we try to query the __auth__/Profile and console.log the results.
 // pls note should implement promisses as the old version.
@@ -8,7 +7,10 @@ const test1 = require('test1.json');
 // We try to make this: 
 j2m
   .input(test1)
-  .then(console.log);
+  .then(console.log)
+  .then(() => {
+    process.exit(1);
+  });
   
 // into this:
 // const { query, filter, sort, skip, limit }  = json1
