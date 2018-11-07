@@ -3,7 +3,7 @@
   "database": "app",
   "collection": "Todos",
   "data": {
-    title: "First Task", 
-    completed: false
+    "title": "First Task", 
+    "completed": false
   }
 }
