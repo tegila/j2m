@@ -6,18 +6,23 @@ Keep it simple by only delivering information comming from json to the Native AP
 # Installing (Docker way)
 
 > First you have to install docker and docker-compose then:
+
 `docker-compose up -d --build`
 
 > Check if all the two containers are running
+
 `docker ps`
 
 > Debugging:
+
 `docker logs j2m_j2m_1` 
 
 # Installing (Old way)
 
 > Good old npm
+
 `npm install`
 
 # Testing 
+
 `node test/index.js`
