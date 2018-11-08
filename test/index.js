@@ -1,6 +1,8 @@
-const j2m = require('../index.js');
-const test1 = require('./task.insert.json');
+const j2m = require('../src/index.js');
+const test1 = require('./task.insertOne.json');
 const test2 = require('./task.find.json');
+// updateOne completed from false to true
+// remove all completed true 
 
 // this is test one:
 // we try to query the __auth__/Profile and console.log the results.
@@ -10,10 +12,12 @@ const test2 = require('./task.find.json');
 j2m
   .input(test1)
   .then(console.log)
+  .catch(console.log)
   .then(() => {
     j2m
       .input(test2)
       .then(console.log)
+      .catch(console.log)
       .then(() => {
         process.exit(1);
       });

@@ -1,0 +1,19 @@
+#$Env:COMPOSE_CONVERT_WINDOWS_PATHS=1
+version: '3'
+services:
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./initial.js:/docker-entrypoint-initdb.d/initial.js
+    environment:
+      MONGO_INITDB_DATABASE: "__auth__"
+  j2m:
+    image: j2m:latest
+    build: .
+    links:
+      - mongo
+    depends_on:
+      - mongo

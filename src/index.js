@@ -2,7 +2,7 @@ var MongoClient = require('mongodb').MongoClient;
 var async = require('async');
 var findModel = require('./find');
 
-const url = `mongodb://127.0.0.1:27017/`;
+const url = `mongodb://${process.env.DOCKER ? 'mongo' : '127.0.0.1'}:27017/`;
 const input = (payload) => {
   return new Promise((resolve, reject) => {
     if (!payload || typeof payload.database == 'undefined')
