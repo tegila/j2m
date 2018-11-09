@@ -1,6 +1,5 @@
-var MongoClient = require('mongodb').MongoClient;
 var async = require('async');
-var findModel = require('./find');
+var mongoActions = require('./mongoActions');
 
 const url = `mongodb://${process.env.DOCKER ? 'mongo' : '127.0.0.1'}:27017/`;
 const input = (payload) => {
@@ -11,18 +10,30 @@ const input = (payload) => {
       reject({status: 'failed', msg: "Type is undefined!"});
     async.waterfall([
       function(callback) {
-        MongoClient.connect(url, (err, connection) => {
-          if (!connection) return callback(null, true, {msg: 'connection error'});
-          return callback(null, false, {db: connection.db(payload.database)});
+        mongoActions.connect(url, payload)
+        .then(db => {
+          callback(null, false, {db: db});
+        })
+        .catch(err => {
+          callback(null, true, {msg: err.msg});
         });
-      },
+      }, // checking database is valid or not
       function(error, data, callback) {
         if (error) return callback(error, data);
         // filtering
         var db = data.db;
-        var cursor = db.collection(payload.collection);
+        var collection = db.collection(payload.collection);
         
         switch (payload.type) {
+          case 'insertOne':
+            mongoActions.insertOne(collection, payload)
+            .then(data => {
+              callback(null, {msg: 'Success inserting'});
+            })
+            .catch(err => {
+              callback(true, {msg: 'inserting data error'});
+            });
+            break;
           case 'update':
             break;
           case 'save':
@@ -30,11 +41,9 @@ const input = (payload) => {
           case 'delete':
             break;
           default:
-            findModel.exec(cursor, payload).then(data => {
-              callback(null, data);
-            })
-            .catch(err => {
-              callback(true, {msg: 'fetching data error'});
+            mongoActions.find(collection, payload).toArray((err, data) => {
+              if (err) callback(true, {msg: 'fetching data error'});
+              else callback(null, data);
             });
             break;
         }

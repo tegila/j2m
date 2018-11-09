@@ -11,8 +11,9 @@ const test2 = require('./task.find.json');
 // We try to make this: 
 j2m
   .input(test1)
-  .then(console.log)
-  .catch(console.log)
+  .then((response) => {
+    console.log(response);
+  })
   .then(() => {
     j2m
       .input(test2)
@@ -21,7 +22,8 @@ j2m
       .then(() => {
         process.exit(1);
       });
-  });
+  })
+  .catch(console.log);
   
 // into this:
 // const { query, filter, sort, skip, limit }  = json1
