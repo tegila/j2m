@@ -2,27 +2,30 @@ var async = require('async');
 var mongoActions = require('./mongoActions');
 
 const url = `mongodb://${process.env.DOCKER ? 'mongo' : '127.0.0.1'}:27017/`;
-const input = (payload) => {
-  return new Promise((resolve, reject) => {
-    if (!payload || typeof payload.database == 'undefined')
-      reject({status: 'failed', msg: "database is undefined"});
-    if (!payload || typeof payload.type == 'undefined' || payload.type == '')
-      reject({status: 'failed', msg: "Type is undefined!"});
-    async.waterfall([
-      function(callback) {
-        mongoActions.connect(url, payload)
-        .then(db => {
-          callback(null, false, {db: db});
-        })
-        .catch(err => {
-          callback(null, true, {msg: err.msg});
-        });
-      }, // checking database is valid or not
-      function(error, data, callback) {
-        if (error) return callback(error, data);
-        // filtering
-        var db = data.db;
-        var collection = db.collection(payload.collection);
+
+const validate_fields = (payload, reject) => {
+  if (!payload || typeof payload.database == 'undefined')
+    reject({status: 'failed', msg: "database is undefined"});
+  if (!payload || typeof payload.type == 'undefined' || payload.type == '')
+    reject({status: 'failed', msg: "Type is undefined!"});
+};
+
+const conn = new Promise((resolve, reject) => {
+  MongoClient.connect(url, (err, connection) => {
+      if (!connection) reject({msg: 'connection error'});
+      var db = connection.db("test");
+      resolve(db);
+  });
+});
+
+module.exports = {
+  input: (payload) => {
+    return new Promise((resolve, reject) => {
+      validate_fields(payload, reject);
+
+      // filtering
+      conn.then((db) => {
+        const collection = db.collection(payload.collection);
         
         switch (payload.type) {
           case 'insertOne':
@@ -58,15 +61,8 @@ const input = (payload) => {
               else callback(null, data);
             });
             break;
-        }
-      }
-    ], function(error, result) {
-      if (error) reject({status: 'failed', msg: result.msg});
-      else resolve({status: 'success', data: result});
-    });
-  });
-}
-
-module.exports = {
-  input: input
-}
+          }
+        });
+      });
+    }
+  }
