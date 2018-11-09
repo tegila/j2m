@@ -6,18 +6,18 @@ const deleteJson = require('./task.remove.json');
 var async = require('async');
 
 // https://caolan.github.io/async/docs.html#queue
-const q = async.queue((raw_input) => {
-  return (callback) => {
-    j2m.input(raw_input)
-    .then(console.log)
-    .then(() => {
-      callback(null, false);
-    })
-    .catch(err => {
-      console.log(err);
-      callback(err, null);
-    });
-  }
+const q = async.queue((raw_input, callback) => {
+  j2m.input(raw_input)
+  .then()
+  .then((data) => {
+    console.log(data);
+    callback(null, false);
+  })
+  .catch(err => {
+    console.log(err);
+    callback(err, null);
+  });
+
 }, 1);
 // 1 each time (Series)
 
@@ -27,5 +27,5 @@ q.drain = function() {
 };
 
 q.push([insertJson, findJson, updateJson, deleteJson], () => {
-  console.log('database initial status');
+  console.log('Processing new data....');
 });
