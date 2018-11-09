@@ -75,5 +75,24 @@ module.exports = {
     insertOne: (collection, payload) => {
         const { data } = payload;
         return collection.insertOne(data);
+    },
+    updateOne: (collection, payload) => {
+        const { filter, update, options } = payload;
+        return collection
+            .updateOne(
+                typeof filter == 'undefined'? {}: filter,
+                { 
+                    $set: typeof update=='undefined'? {}: update
+                },
+                typeof options=='undefined'? {}: options 
+            );
+    },
+    remove: (collection, payload) => {
+        const { query, options } = payload;
+        return collection
+            .remove(
+                typeof query == 'undefined'? {}: query,
+                typeof options == 'undefined'? {}: options
+            );
     }
 }

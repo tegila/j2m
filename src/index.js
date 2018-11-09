@@ -31,14 +31,26 @@ const input = (payload) => {
               callback(null, {msg: 'Success inserting'});
             })
             .catch(err => {
-              callback(true, {msg: 'inserting data error'});
+              callback(true, {msg: 'Failed of inserting'});
             });
             break;
-          case 'update':
+          case 'updateOne':
+            mongoActions.updateOne(collection, payload)
+            .then(data => {
+              callback(null, {msg: 'Success updating'});
+            })
+            .catch(err => {
+              callback(true, {msg: 'Failed of updating'});
+            });
             break;
-          case 'save':
-            break;
-          case 'delete':
+          case 'remove':
+            mongoActions.remove(collection, payload)
+            .then(res => {
+              callback(null, {msg: 'Success of removing'});
+            })
+            .catch(err => {
+              callback(true, {msg: 'Failed of removing'});
+            })
             break;
           default:
             mongoActions.find(collection, payload).toArray((err, data) => {

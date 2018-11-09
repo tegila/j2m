@@ -1,6 +1,10 @@
 const j2m = require('../src/index.js');
-const test1 = require('./task.insertOne.json');
-const test2 = require('./task.find.json');
+const insertJson = require('./task.insertOne.json');
+const findJson = require('./task.find.json');
+const updateJson = require('./task.updateOne.json');
+const deleteJson = require('./task.remove.json');
+var async = require('async');
+
 // updateOne completed from false to true
 // remove all completed true 
 
@@ -9,23 +13,89 @@ const test2 = require('./task.find.json');
 // pls note should implement promisses as the old version.
 
 // We try to make this: 
-j2m
-  .input(test1)
-  .then((response) => {
-    console.log(response);
-  })
-  .then(() => {
-    j2m
-      .input(test2)
+async.waterfall([
+  (callback) => {
+    console.log('database initial status');
+    j2m.input(findJson)
       .then(console.log)
-      .catch(console.log)
       .then(() => {
-        process.exit(1);
+        callback(null, false);
+      })
+      .catch(err => {
+        console.log(err);
+        callback(null, true);
       });
-  })
-  .catch(console.log);
-  
-// into this:
-// const { query, filter, sort, skip, limit }  = json1
-// db.Profiles.find(query, filter).sort(sort).skip(skip).limit(limit);
-// and send the answer back
+  }, // insert testing
+  (err, callback) => {
+    if (err) return callback(null, true);
+    j2m.input(insertJson)
+      .then(res => {
+        console.log(res);
+        j2m.input(findJson)
+          .then(data=> {
+            console.log(data);
+            callback(null, false);
+          })
+          .catch(err => {
+            console.log(err);
+            callback(null, true);
+          });
+      })
+      .catch(err => {
+        console.log(err);
+        callback(null, true);
+      });
+  }, // update testing
+  (err, callback) => {
+    if (err) return callback(null, true);
+    j2m.input(updateJson)
+      .then(res => {
+        console.log(res);
+        j2m.input({
+            "type": "find",
+            "database": "app",
+            "collection": "Todos",
+            "query": {}
+          })
+          .then(data => {
+            console.log(data);
+            callback(null, false);
+          })
+          .catch(err => {
+            console.log(err);
+            callback(null, true);
+          });
+      })
+      .catch(err => {
+        console.log(err);
+        callback(null, true);
+      });
+  }, // delete testing
+  (err, callback) => {
+    if (err) return callback();
+    j2m.input(deleteJson)
+      .then(res => {
+        console.log(res);
+        j2m.input({
+            "type": "find",
+            "database": "app",
+            "collection": "Todos",
+            "query": {}
+          })
+          .then(data => {
+            console.log(data);
+            callback();
+          })
+          .catch(err => {
+            console.log(err);
+            callback();
+          });
+      })
+      .catch(err => {
+        console.log(err);
+        callback();
+      });
+  }
+], () => {
+  process.exit(1);
+});
