@@ -1,0 +1,30 @@
+{
+  "updateOne": {
+    "type": "updateOne",
+    "database": "app",
+    "collection": "Todos",
+    "filter": {
+      "title": "First Task"
+    },
+    "update": {
+      "completed": true
+    },
+    "options": {
+      "upsert": false
+    }
+  },
+  "updateMany": {
+    "type": "updateMany",
+    "database": "app",
+    "collection": "Todos",
+    "filter": {
+      "completed": false
+    },
+    "update": {
+      "title": "updated task"
+    },
+    "options": {
+      "upsert": false
+    }
+  }
+}

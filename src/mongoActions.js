@@ -4,7 +4,7 @@ var async = require('async');
 module.exports = {
     connect: (url) => {
         return new Promise((resolve, reject) => {
-            MongoClient.connect(url, (err, connection) => {
+            MongoClient.connect(url, {useNewUrlParser: true }, (err, connection) => {
                 if (!connection) reject({msg: 'connection error'});
                 else resolve(connection);
             });
@@ -55,36 +55,72 @@ module.exports = {
             });
         });
     },
+    // Create actions
+    insertOne: (collection, payload) => {
+        const { data, options } = payload;
+        return collection.insertOne(data, options);
+    },
+    insertMany: (collection, payload) => {
+        const { data, options } = payload;
+        return collection.insertMany(data, options);
+    },
+    // Read actions
     find: (collection, payload) => {
         const {query, filter, sort, skip, limit} = payload;
 
-    return collection
-      .find(typeof query == 'undefined'? {}: query, typeof filter == 'undefined'? {}: filter)
-      .skip(isNaN(skip)? 0: parseInt(skip))
-      .sort(typeof sort == 'undefined'? {}: sort)
-      .limit(isNaN(limit)? 0: parseInt(limit));
-  },
-  insertOne: (collection, payload) => {
-    const { data } = payload;
-    return collection.insertOne(data);
-  },
-  updateOne: (collection, payload) => {
-    const { filter, update, options } = payload;
-    return collection
-      .updateOne(
-        typeof filter == 'undefined'? {}: filter,
-        { 
-            $set: typeof update=='undefined'? {}: update
-        },
-        typeof options=='undefined'? {}: options 
-      );
-  },
-  remove: (collection, payload) => {
-    const { query, options } = payload;
-    return collection
-      .remove(
-        typeof query == 'undefined'? {}: query,
-        typeof options == 'undefined'? {}: options
-      );
-  }
+        return collection
+        .find(query)
+        .skip(isNaN(skip)? 0: parseInt(skip))
+        .sort(typeof sort == 'undefined'? {'_id': -1}: sort)
+        .limit(isNaN(limit)? 0: parseInt(limit));
+    },
+    // Update actions
+    updateOne: (collection, payload) => {
+        const { filter, update, options } = payload;
+        return collection
+        .updateOne(
+            filter,
+            { 
+                $set: update
+            },
+            options 
+        );
+    },
+    updateMany: (collection, payload) => {
+        const { filter, update, options } = payload;
+        return collection
+        .updateMany(
+            filter,
+            { 
+                $set: update
+            },
+            options 
+        );
+    },
+    replaceOne: (collection, payload) => {
+        const { filter, replacement, options } = payload;
+        return collection
+        .replaceOne(
+            filter,
+            replacement,
+            options 
+        );
+    },
+    // Delete actions
+    deleteOne: (collection, payload) => {
+        const { filter, options } = payload;
+        return collection
+        .deleteOne(
+            filter,
+            options
+        );
+    },
+    deleteMany: (collection, payload) => {
+        const { filter, options } = payload;
+        return collection
+        .deleteMany(
+            filter,
+            typeof options == 'undefined'? {}: options
+        );
+    }
 }

@@ -1,0 +1,26 @@
+{
+  "insertOne": {
+    "type": "insertOne",
+    "database": "app",
+    "collection": "Todos",
+    "data": {
+      "title": "First Task", 
+      "completed": false
+    }
+  },
+  "insertMany": {
+    "type": "insertMany",
+    "database": "app",
+    "collection": "Todos",
+    "data": [
+      {
+        "title": "Second Task", 
+        "completed": false
+      },
+      {
+        "title": "Third Task", 
+        "completed": false
+      }
+    ]
+  }
+}

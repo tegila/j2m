@@ -1,31 +1,27 @@
 const j2m = require('../src/index.js');
-const insertJson = require('./task.insertOne.json');
-const findJson = require('./task.find.json');
-const updateJson = require('./task.updateOne.json');
-const deleteJson = require('./task.remove.json');
+const createJson = require('./task.create.json');
+const readJson = require('./task.read.json');
+const updateJson = require('./task.update.json');
+const deleteJson = require('./task.delete.json');
 var async = require('async');
 
 // https://caolan.github.io/async/docs.html#queue
 j2m.connect()
 .then(connection => {
   var actions = [
-    findJson,
-    insertJson,
-    findJson,
-    updateJson,
-    {
-      "type": "find",
-      "database": "app",
-      "collection": "Todos",
-      "query": {}
-    },
-    deleteJson,
-    {
-      "type": "find",
-      "database": "app",
-      "collection": "Todos",
-      "query": {}
-    }
+    readJson.findAll,
+    createJson.insertOne,
+    readJson.withQuery,
+    createJson.insertMany,
+    readJson.findAll,
+    updateJson.updateOne,
+    readJson.findAll,
+    updateJson.updateMany,
+    readJson.findAll,
+    deleteJson.deleteOne,
+    readJson.findAll,
+    deleteJson.deleteMany,
+    readJson.findAll
   ];
 
   const q = async.queue((raw_input, callback) => {
@@ -37,7 +33,6 @@ j2m.connect()
         callback();
       });
   }, actions.length);
-  // 1 each time (Series)
   
   q.drain = function() {
     console.log('all items have been processed');

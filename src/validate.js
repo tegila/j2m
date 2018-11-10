@@ -1,3 +1,5 @@
+var async = require('async');
+var mongoActions = require('./mongoActions');
 const validate = (db, payload) => {
   return new Promise((resolve, reject) => {
     async.waterfall([
@@ -45,10 +47,50 @@ const validate = (db, payload) => {
 };
 
 const validate_fields = (payload, reject) => {
-  if (!payload || typeof payload.database == 'undefined')
+  const verbs = Object.keys(mongoActions);
+  
+  if (!payload) return({status: 'failed', msg: "param is blank"});
+  if (typeof payload.database == 'undefined' || payload.database.trim() == '')
     return ({status: 'failed', msg: "database is undefined"});
-  if (!payload || typeof payload.type == 'undefined' || payload.type == '')
+  if (typeof payload.collection == 'undefined' || payload.collection.trim() == '')
+    return ({status: 'failed', msg: "collection is undefined"});
+  if (typeof payload.type == 'undefined' || payload.type.trim() == '')
     return ({status: 'failed', msg: "Type is undefined!"});
+  if (verbs.indexOf(payload.type.trim()) < 0)
+    return ({status: 'failed', msg: 'Wrong verb type'});
+
+  var type = payload.type.trim();
+  // validation of each params
+  if (['insertOne', 'insertMany'].indexOf(type) >= 0) {
+    if (typeof payload.data == 'undefined' || Object.keys(payload.data).length <= 0)
+      return ({status: 'failed', msg: 'Inserting data is blank'});
+    if (type == 'insertOne' && (typeof payload.data != 'object' || !payload.data))
+      return ({status: 'failed', msg: 'Wrong insert data type'});
+    if (type == 'insertMany' && (!Array.isArray(payload.data) || payload.data.indexOf(null) >= 0 || Object.keys(payload.data).indexOf('null')>= 0))
+      return ({status: 'failed', msg: 'Wrong insertMany data type'});
+  }
+
+  if (['find'].indexOf(type) >= 0) {
+    if (typeof payload.query == 'undefined') return ({status: 'failed', msg: "query is undefined!"});
+    if (typeof payload.query != 'object') return ({status: 'failed', msg: "query type wrong!"});
+  }
+
+  if (['updateOne', 'updateMany', 'replaceOne', 'deleteOne', 'deleteMany'].indexOf(type) >= 0) {
+    if (typeof payload.filter == 'undefined') return ({status: 'failed', msg: "filter is undefined!"});
+    if (typeof payload.filter != 'object' || (!payload.filter && ['deleteOne', 'deleteMany'].indexOf < 0)) return ({status: 'failed', msg: "filter type wrong!"});
+
+    if (['updateOne', 'updateMany'].indexOf(type) >= 0) {
+      if (typeof payload.update == 'undefined') return ({status: 'failed', msg: "update data is undefined!"});
+      if (Object.keys(payload.update).length <= 0) return ({status: 'failed', msg: "update data is blank!"});
+      if (typeof payload.update != 'object' || !payload.update) return ({status: 'failed', msg: "update data type wrong!"});
+    }
+
+    if (type == 'replaceOne') {
+      if (typeof payload.replacement == 'undefined') return ({status: 'failed', msg: "replace data is undefined!"});
+      if (typeof payload.replacement != 'object' || !payload.replacement) return ({status: 'failed', msg: "replace data type wrong!"});
+    }
+  }
+
   return ({status: 'ok'});
 };
 

@@ -1,0 +1,20 @@
+{
+  "deleteOne": {
+    "type": "deleteOne",
+    "database": "app",
+    "collection": "Todos",
+    "filter": {
+      "completed": false
+    },
+    "options": {
+    }
+  },
+  "deleteMany": {
+    "type": "deleteMany",
+    "database": "app",
+    "collection": "Todos",
+    "filter": {},
+    "options": {
+    }
+  }
+}

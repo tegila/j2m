@@ -1,8 +1,0 @@
-{
-  "type": "find",
-  "database": "app",
-  "collection": "Todos",
-  "query": {
-    "completed": false
-  }
-}
