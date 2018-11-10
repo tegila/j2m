@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 var MongoClient = require('mongodb').MongoClient;
 var async = require('async');
 
@@ -58,11 +57,6 @@ module.exports = {
     },
     find: (collection, payload) => {
         const {query, filter, sort, skip, limit} = payload;
-=======
-module.exports = {
-  find: (collection, payload) => {
-    const {query, filter, sort, skip, limit} = payload;
->>>>>>> 6b7448f86e9103f678ed56a7a07d489ebfee88c9
 
     return collection
       .find(typeof query == 'undefined'? {}: query, typeof filter == 'undefined'? {}: filter)
