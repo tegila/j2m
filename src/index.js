@@ -10,9 +10,7 @@ const connect = () => {
 const input = (connection, payload) => {
   var db = connection.db(payload.database);
   return new Promise((resolve, reject) => {
-    validate(db, payload)
-    .then(() => {
-      var valid_results = validate_fields(payload);
+    var valid_results = validate_fields(payload);
       if (valid_results.status == 'failed') return reject(valid_results);
       var collection = db.collection(payload.collection);
       if (payload.type == 'find') {
@@ -29,11 +27,6 @@ const input = (connection, payload) => {
           reject({status: 'failed', msg: 'Failed of operating ' + payload.type});
         });
       }
-    })
-    .catch(err => {
-      console.log(err);
-      reject({statue: 'failed', msg: err.msg});
-    });
   });
 }
 
