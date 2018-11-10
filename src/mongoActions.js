@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 var MongoClient = require('mongodb').MongoClient;
 var async = require('async');
 
@@ -57,34 +58,39 @@ module.exports = {
     },
     find: (collection, payload) => {
         const {query, filter, sort, skip, limit} = payload;
+=======
+module.exports = {
+  find: (collection, payload) => {
+    const {query, filter, sort, skip, limit} = payload;
+>>>>>>> 6b7448f86e9103f678ed56a7a07d489ebfee88c9
 
-        return collection
-            .find(typeof query == 'undefined'? {}: query, typeof filter == 'undefined'? {}: filter)
-            .skip(isNaN(skip)? 0: parseInt(skip))
-            .sort(typeof sort == 'undefined'? {}: sort)
-            .limit(isNaN(limit)? 0: parseInt(limit));
-    },
-    insertOne: (collection, payload) => {
-        const { data } = payload;
-        return collection.insertOne(data);
-    },
-    updateOne: (collection, payload) => {
-        const { filter, update, options } = payload;
-        return collection
-            .updateOne(
-                typeof filter == 'undefined'? {}: filter,
-                { 
-                    $set: typeof update=='undefined'? {}: update
-                },
-                typeof options=='undefined'? {}: options 
-            );
-    },
-    remove: (collection, payload) => {
-        const { query, options } = payload;
-        return collection
-            .remove(
-                typeof query == 'undefined'? {}: query,
-                typeof options == 'undefined'? {}: options
-            );
-    }
+    return collection
+      .find(typeof query == 'undefined'? {}: query, typeof filter == 'undefined'? {}: filter)
+      .skip(isNaN(skip)? 0: parseInt(skip))
+      .sort(typeof sort == 'undefined'? {}: sort)
+      .limit(isNaN(limit)? 0: parseInt(limit));
+  },
+  insertOne: (collection, payload) => {
+    const { data } = payload;
+    return collection.insertOne(data);
+  },
+  updateOne: (collection, payload) => {
+    const { filter, update, options } = payload;
+    return collection
+      .updateOne(
+        typeof filter == 'undefined'? {}: filter,
+        { 
+            $set: typeof update=='undefined'? {}: update
+        },
+        typeof options=='undefined'? {}: options 
+      );
+  },
+  remove: (collection, payload) => {
+    const { query, options } = payload;
+    return collection
+      .remove(
+        typeof query == 'undefined'? {}: query,
+        typeof options == 'undefined'? {}: options
+      );
+  }
 }
