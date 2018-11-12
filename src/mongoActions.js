@@ -1,12 +1,18 @@
 var MongoClient = require('mongodb').MongoClient;
 var async = require('async');
 
+const mongoConnect = (url, callback) => {
+    MongoClient.connect(url, {useNewUrlParser: true }, (err, connection) => {
+        console.log('connecting mongodb server');
+        if (!connection) setTimeout(() => {mongoConnect(url, callback);}, 1000);
+        else callback(connection);
+    });
+}
 module.exports = {
     connect: (url) => {
         return new Promise((resolve, reject) => {
-            MongoClient.connect(url, {useNewUrlParser: true }, (err, connection) => {
-                if (!connection) reject({msg: 'connection error'});
-                else resolve(connection);
+            mongoConnect(url, (connection) => {
+                resolve(connection);
             });
         });
     },
