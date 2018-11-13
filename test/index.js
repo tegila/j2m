@@ -24,26 +24,44 @@ j2m.connect()
     readJson.findAll
   ];
 
+  var dbconfig = {
+    db: null,
+    dbname: '',
+    collection: null,
+    collname: ''
+  };
+  
   const q = async.queue((raw_input, callback) => {
-    j2m.input(connection, raw_input)
-      .then(console.log)
-      .then(callback)
-      .catch(err => {
-        console.log(err);
-        callback();
+    if (dbconfig.db === null || dbconfig.dbname !== raw_input.database) {
+      dbconfig.db = j2m.getDB(connection, raw_input.database);
+      dbconfig.dbname = raw_input.database;
+    }
+
+    if (dbconfig.collection === null || dbconfig.collname != raw_input.collection) {
+      dbconfig.collection = dbconfig.db.collection(raw_input.collection);
+      dbconfig.collname = raw_input.collection;
+    }
+    
+    j2m.input(dbconfig.collection, raw_input)
+      .then((result) => {
+        callback({payload: raw_input, data: result});
       });
   }, actions.length);
   
   q.drain = function() {
-    console.log('all items have been processed');
+    console.log('All items have been processed');
     process.exit(1);
   };
   
-  q.push(actions, () => {
-    console.log('database initial status');
+  q.push(actions, (res) => {
+    if (res.data.status == 'success')
+      console.log(`'${res.payload.type}' operation on "${res.payload.collection}": `, res.data.data);
+    else 
+      console.log(`Error of '${res.payload.type}' operation on "${res.payload.collection}": `, res.data.msg);
+    console.log("\n");
   });  
 })
 .catch(err => {
-  console.log(err);
+  console.log('Error is occured:', err);
   process.exit(1);
 });
