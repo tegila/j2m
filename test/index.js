@@ -38,6 +38,7 @@ j2m.connect()
     }
 
     if (dbconfig.collection === null || dbconfig.collname != raw_input.collection) {
+      console.log("one connection");
       dbconfig.collection = dbconfig.db.collection(raw_input.collection);
       dbconfig.collname = raw_input.collection;
     }

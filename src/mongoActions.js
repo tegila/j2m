@@ -1,4 +1,5 @@
 var MongoClient = require('mongodb').MongoClient;
+var Logger = require('mongodb').Logger;
 var async = require('async');
 
 const mongoConnect = (url, callback) => {
@@ -12,6 +13,8 @@ module.exports = {
     connect: (url) => {
         return new Promise((resolve, reject) => {
             mongoConnect(url, (connection) => {
+                Logger.setLevel('error');
+                // Logger.filter('class', ['Db']);
                 resolve(connection);
             });
         });
