@@ -51,6 +51,7 @@ j2m.connect()
   
   q.drain = function() {
     console.log('All items have been processed');
+    connection.close();
     process.exit(1);
   };
   
