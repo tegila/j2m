@@ -4,24 +4,54 @@ const readJson = require('./task.read.json');
 const updateJson = require('./task.update.json');
 const deleteJson = require('./task.delete.json');
 var async = require('async');
+var queryBuilder = require('../querybuilder');
 
+var findPayload = queryBuilder('app/Todos')
+  .find()
+  .eq("completed", false)
+  .getPayload();
+
+var insertPayload = queryBuilder('app/Todos')
+  .insert('insertMany')
+  .data([{
+    title: 'First List',
+    completed: false,
+  },
+  {
+    title: 'Second List',
+    completed: false,
+  }])
+  .getPayload();
+
+var insertOnePayload = queryBuilder('app/Todos')
+  .insert('insertOne')
+  .data({
+    title: 'Third List',
+    completed: false,
+  })
+  .getPayload();
+console.log(insertOnePayload);
 // https://caolan.github.io/async/docs.html#queue
 j2m.connect()
 .then(connection => {
   var actions = [
-    readJson.findAll,
-    createJson.insertOne,
-    readJson.withQuery,
-    createJson.insertMany,
-    readJson.findAll,
-    updateJson.updateOne,
-    readJson.findAll,
-    updateJson.updateMany,
-    readJson.findAll,
-    deleteJson.deleteOne,
-    readJson.findAll,
-    deleteJson.deleteMany,
-    readJson.findAll
+    findPayload,
+    insertOnePayload,
+    insertPayload,
+    findPayload
+    // readJson.findAll,
+    // createJson.insertOne,
+    // readJson.withQuery,
+    // createJson.insertMany,
+    // readJson.findAll,
+    // updateJson.updateOne,
+    // readJson.findAll,
+    // updateJson.updateMany,
+    // readJson.findAll,
+    // deleteJson.deleteOne,
+    // readJson.findAll,
+    // deleteJson.deleteMany,
+    // readJson.findAll
   ];
 
   var dbconfig = {
@@ -46,6 +76,11 @@ j2m.connect()
     j2m.input(dbconfig.collection, raw_input)
       .then((result) => {
         callback({payload: raw_input, data: result});
+      })
+      .catch(err => {
+        console.log('Error is occured', err);
+        callback({payload: raw_input, data: {status: 'failed', msg: 'Unknow error'}});
+        process.exit(0);
       });
   }, actions.length);
   

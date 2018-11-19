@@ -1,6 +1,6 @@
 var async = require('async');
 var mongoActions = require('./mongoActions');
-const validate = (db, payload) => {
+const validate = (db, transaction) => {
   return new Promise((resolve, reject) => {
     async.waterfall([
       function(callback) {
@@ -8,15 +8,15 @@ const validate = (db, payload) => {
           if (err) callback(null, true, 'Checking error of database valid!');
           else {
             if (typeof results.databases == 'undefined' || results.databases.length <= 0) {
-              callback(null, true, 'The database ' + payload.database + ' is not existed on mongodb server!');
+              callback(null, true, 'The database ' + transaction.database + ' is not existed on mongodb server!');
             } else {
               var flag = false;
               results.databases.forEach(database => {
-                if(database.name == payload.database) flag = true;
+                if(database.name == transaction.database) flag = true;
               });
 
               if (flag) callback(null, false, 'Valid database');
-              else callback(null, true, `The database "${payload.database}" is not existed on mongodb server!`);
+              else callback(null, true, `The database "${transaction.database}" is not existed on mongodb server!`);
             }
           }
         });
@@ -29,12 +29,12 @@ const validate = (db, payload) => {
               if (colls.length > 0) {
                 var flag = false;
                 colls.forEach(coll => {
-                  if (coll.name == payload.collection) flag=true;
+                  if (coll.name == transaction.collection) flag=true;
                 });
                 if (flag) callback(false, 'Valid collection');
-                else callback(true, `The collection "${payload.collection}" is not existed"`);
+                else callback(true, `The collection "${transaction.collection}" is not existed"`);
               } else {
-                callback(true, `The collection "${payload.collection}" is not existed"`);
+                callback(true, `The collection "${transaction.collection}" is not existed"`);
               }
             }
           });
@@ -46,48 +46,48 @@ const validate = (db, payload) => {
   });
 };
 
-const validate_fields = (payload, reject) => {
+const validate_fields = (transaction, reject) => {
   const verbs = Object.keys(mongoActions);
   
-  if (!payload) return({status: 'failed', msg: "param is blank"});
-  if (typeof payload.database == 'undefined' || payload.database.trim() == '')
+  if (!transaction) return({status: 'failed', msg: "param is blank"});
+  if (typeof transaction.database == 'undefined' || transaction.database.trim() == '')
     return ({status: 'failed', msg: "database is undefined"});
-  if (typeof payload.collection == 'undefined' || payload.collection.trim() == '')
+  if (typeof transaction.collection == 'undefined' || transaction.collection.trim() == '')
     return ({status: 'failed', msg: "collection is undefined"});
-  if (typeof payload.type == 'undefined' || payload.type.trim() == '')
+  if (typeof transaction.type == 'undefined' || transaction.type.trim() == '')
     return ({status: 'failed', msg: "Type is undefined!"});
-  if (verbs.indexOf(payload.type.trim()) < 0)
+  if (verbs.indexOf(transaction.type.trim()) < 0)
     return ({status: 'failed', msg: 'Wrong verb type'});
 
-  var type = payload.type.trim();
+  var type = transaction.type.trim();
   // validation of each params
   if (['insertOne', 'insertMany'].indexOf(type) >= 0) {
-    if (typeof payload.data == 'undefined' || Object.keys(payload.data).length <= 0)
+    if (typeof transaction.payload.data == 'undefined' || Object.keys(transaction.payload.data).length <= 0)
       return ({status: 'failed', msg: 'Inserting data is blank'});
-    if (type == 'insertOne' && (typeof payload.data != 'object' || !payload.data))
+    if (type == 'insertOne' && (typeof transaction.payload.data != 'object' || !transaction.payload.data))
       return ({status: 'failed', msg: 'Wrong insert data type'});
-    if (type == 'insertMany' && (!Array.isArray(payload.data) || payload.data.indexOf(null) >= 0 || Object.keys(payload.data).indexOf('null')>= 0))
+    if (type == 'insertMany' && (!Array.isArray(transaction.payload.data) || transaction.payload.data.indexOf(null) >= 0 || Object.keys(transaction.payload.data).indexOf('null')>= 0))
       return ({status: 'failed', msg: 'Wrong insertMany data type'});
   }
 
   if (['find'].indexOf(type) >= 0) {
-    if (typeof payload.query == 'undefined') return ({status: 'failed', msg: "query is undefined!"});
-    if (typeof payload.query != 'object') return ({status: 'failed', msg: "query type wrong!"});
+    if (typeof transaction.payload.query == 'undefined') return ({status: 'failed', msg: "query is undefined!"});
+    if (typeof transaction.payload.query != 'object') return ({status: 'failed', msg: "query type wrong!"});
   }
 
   if (['updateOne', 'updateMany', 'replaceOne', 'deleteOne', 'deleteMany'].indexOf(type) >= 0) {
-    if (typeof payload.filter == 'undefined') return ({status: 'failed', msg: "filter is undefined!"});
-    if (typeof payload.filter != 'object' || (!payload.filter && ['deleteOne', 'deleteMany'].indexOf < 0)) return ({status: 'failed', msg: "filter type wrong!"});
+    if (typeof transaction.payload.filter == 'undefined') return ({status: 'failed', msg: "filter is undefined!"});
+    if (typeof transaction.payload.filter != 'object' || (!transaction.filter && ['deleteOne', 'deleteMany'].indexOf < 0)) return ({status: 'failed', msg: "filter type wrong!"});
 
     if (['updateOne', 'updateMany'].indexOf(type) >= 0) {
-      if (typeof payload.update == 'undefined') return ({status: 'failed', msg: "update data is undefined!"});
-      if (Object.keys(payload.update).length <= 0) return ({status: 'failed', msg: "update data is blank!"});
-      if (typeof payload.update != 'object' || !payload.update) return ({status: 'failed', msg: "update data type wrong!"});
+      if (typeof transaction.payload.update == 'undefined') return ({status: 'failed', msg: "update data is undefined!"});
+      if (Object.keys(transaction.payload.update).length <= 0) return ({status: 'failed', msg: "update data is blank!"});
+      if (typeof transaction.payload.update != 'object' || !transaction.payload.update) return ({status: 'failed', msg: "update data type wrong!"});
     }
 
     if (type == 'replaceOne') {
-      if (typeof payload.replacement == 'undefined') return ({status: 'failed', msg: "replace data is undefined!"});
-      if (typeof payload.replacement != 'object' || !payload.replacement) return ({status: 'failed', msg: "replace data type wrong!"});
+      if (typeof transaction.payload.replacement == 'undefined') return ({status: 'failed', msg: "replace data is undefined!"});
+      if (typeof transaction.payload.replacement != 'object' || !transaction.payload.replacement) return ({status: 'failed', msg: "replace data type wrong!"});
     }
   }
 
