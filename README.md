@@ -1,6 +1,4 @@
-# Test Coverage (gitlab):
-
-![tests](https://gitlab.com/tegila/j2m/badges/master/build.svg) Tests
+![tests](https://gitlab.com/tegila/j2m/badges/master/build.svg)
 
 # What is j2m (JSON 2 MONGODB) ?
 
