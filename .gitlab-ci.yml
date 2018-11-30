@@ -8,6 +8,7 @@ services:
  - mongo
 
 before_script:
+ - git submodule update --recursive --remote
  - npm i --silent
 
 tests:
