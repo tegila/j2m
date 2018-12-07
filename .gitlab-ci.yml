@@ -1,0 +1,16 @@
+image: node:latest
+
+cache:
+ paths:
+  - node_modules/
+
+services:
+ - mongo
+
+before_script:
+ - git submodule update --init --recursive
+ - npm i --silent
+
+tests:
+ script:
+  - node test/index.js
