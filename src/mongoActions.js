@@ -89,9 +89,7 @@ module.exports = {
         return collection
         .updateOne(
             filter,
-            { 
-                $set: update
-            },
+            update,
             options 
         );
     },
@@ -100,9 +98,7 @@ module.exports = {
         return collection
         .updateMany(
             filter,
-            { 
-                $set: update
-            },
+            update,
             options 
         );
     },

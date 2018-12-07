@@ -26,32 +26,51 @@ var insertPayload = queryBuilder('app/Todos')
 var insertOnePayload = queryBuilder('app/Todos')
   .insert('insertOne')
   .data({
-    title: 'Third List',
-    completed: false,
-  })
+    title: 'temp List',
+    quantity: 10,
+    completed: true,
+  })  
   .getPayload();
-console.log(insertOnePayload);
+
+var updateOnePayload = queryBuilder('app/Todos')
+  .updateOne({completed: true})
+  .currentDate('lastmodified', true)
+  .increment('quantity', 1)
+  .getPayload();
+
+var deleteFilter = queryBuilder('app/Todos')
+  .queryMake()
+  .eq("completed", false)
+  .getPayload();
+
+var deleteOnePayload = queryBuilder('app/Todos')
+  .deleteOne(deleteFilter.payload.query)
+  .getPayload();
+
+var deleteManyFilter = queryBuilder('app/Todos')
+  .queryMake()
+  .eq("completed", true)
+  .getPayload();
+
+var deleteManyPayload = queryBuilder('app/Todos')
+  .deleteMany(deleteManyFilter.payload.query)
+  .getPayload();
+
 // https://caolan.github.io/async/docs.html#queue
 j2m.connect()
 .then(connection => {
-  var actions = [
+  var actions = [    
+    findPayload,
+    insertPayload,
+    findPayload,
+    updateOnePayload,
     findPayload,
     insertOnePayload,
-    insertPayload,
+    findPayload,
+    deleteOnePayload,
+    findPayload,
+    deleteManyPayload,
     findPayload
-    // readJson.findAll,
-    // createJson.insertOne,
-    // readJson.withQuery,
-    // createJson.insertMany,
-    // readJson.findAll,
-    // updateJson.updateOne,
-    // readJson.findAll,
-    // updateJson.updateMany,
-    // readJson.findAll,
-    // deleteJson.deleteOne,
-    // readJson.findAll,
-    // deleteJson.deleteMany,
-    // readJson.findAll
   ];
 
   var dbconfig = {
