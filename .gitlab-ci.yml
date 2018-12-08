@@ -14,4 +14,4 @@ testing:
     - node test/index.js
   tags:
     - docker
-    - visargue
+    - gce
