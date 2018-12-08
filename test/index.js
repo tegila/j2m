@@ -106,7 +106,7 @@ j2m.connect()
   q.drain = function() {
     console.log('All items have been processed');
     connection.close();
-    process.exit(1);
+    process.exit(0);
   };
   
   q.push(actions, (res) => {
@@ -119,5 +119,5 @@ j2m.connect()
 })
 .catch(err => {
   console.log('Error is occured:', err);
-  process.exit(0);
+  process.exit(1);
 });
