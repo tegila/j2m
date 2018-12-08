@@ -1,16 +1,17 @@
-image: node:latest
-
-cache:
- paths:
-  - node_modules/
-
-services:
- - mongo
-
-before_script:
- - git submodule update --init --recursive
- - npm i --silent
-
-tests:
- script:
-  - node test/index.js
+testing:
+  image: node:boron
+  services:
+    - name: khezen/mongo:3.4
+      alias: mongo
+  stage: test
+  cache:
+    paths:
+      - node_modules/
+  before_script:
+    - git submodule update --init --recursive
+    - npm i --silent
+  script:
+    - node test/index.js
+  tags:
+    - docker
+    - visargue
