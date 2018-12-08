@@ -119,5 +119,5 @@ j2m.connect()
 })
 .catch(err => {
   console.log('Error is occured:', err);
-  process.exit(1);
+  process.exit(0);
 });
