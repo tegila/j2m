@@ -1,10 +1,17 @@
 {
-  "name": "mongo.io",
+  "name": "j2m",
   "version": "1.0.0",
   "description": "json to mongodb",
-  "main": "index.js",
+  "main": "src/index.js",
+  "author": "sunrise828",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tegila/j2m/issues"
+  },
+  "homepage": "https://github.com/tegila/j2m#readme",
   "scripts": {
-    "start": "node ./test/index.js"
+    "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
+    "test": "node ./test/index.js"
   },
   "repository": {
     "type": "git",
@@ -15,22 +22,16 @@
     "json",
     "node"
   ],
-  "author": "sunrise828",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/tegila/j2m/issues"
-  },
-  "homepage": "https://github.com/tegila/j2m#readme",
   "dependencies": {
     "async": "^2.6.1",
-    "babel-preset-env": "^1.7.0",
-    "babel-register": "^6.26.0",
-    "connect-mongo": "*",
-    "es6-promise": "^4.2.4",
-    "fs": "0.0.1-security",
-    "https": "^1.0.0",
-    "mongodb": "^3.1.9",
-    "socket.io": "^2.1.1",
-    "tweetnacl": "0.13.1"
+    "mongodb": "^3.1.9"
+  },
+  "devDependencies": {
+    "rimraf": "^2.6.1",
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/register": "^7.0.0",
+    "es6-promise": "^4.2.4"
   }
 }

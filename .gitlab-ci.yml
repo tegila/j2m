@@ -1,5 +1,5 @@
 testing:
-  image: node:boron
+  image: node:latest
   services:
     - name: khezen/mongo:3.4
       alias: mongo
@@ -11,6 +11,7 @@ testing:
     - git submodule update --init --recursive
     - npm i --silent
   script:
+    - node --version
     - node test/index.js
   tags:
     - docker
