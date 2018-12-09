@@ -1,5 +1,9 @@
 [![build](https://img.shields.io/gitlab/pipeline/tegila/j2m/master.svg?style=for-the-badge&logo=gitlab)](https://gitlab.com/tegila/j2m/commits/master)
 
+
+[![discord](https://img.shields.io/discord/521119808520192009.svg?style=for-the-badge&logo=discord)](https://discord.gg/xvukxpP)
+
+
 # What is j2m (JSON 2 MONGODB) ?
 
 This is a library/tool to interact with MongoDB Native API using JSON data. 
