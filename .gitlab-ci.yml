@@ -12,7 +12,7 @@ stages:
   - test
 
 test1:
-  <<: *use-mysql
+  <<: *use-mongodb
   image: node:latest
   stage: test
   cache:
