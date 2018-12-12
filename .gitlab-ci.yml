@@ -1,18 +1,32 @@
-testing:
-  image: node:latest
+.use-mongodb: &use-mongodb
   services:
-    - name: khezen/mongo:3.4
-      alias: mongo
+    - khezen/mongo:3.4
+
+before_script:
+  - date
+
+after_script:
+  - date
+
+stages:
+  - test
+
+test1:
+  <<: *use-mysql
+  image: node:latest
   stage: test
   cache:
     paths:
       - node_modules/
   before_script:
     - git submodule update --init --recursive
+    - date
     - npm i --silent
+    - date
   script:
     - node --version
-    - node test/index.js
+    - date
+    - yarn
   tags:
     - docker
     - gce

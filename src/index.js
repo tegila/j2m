@@ -2,7 +2,7 @@ const MongoClient = require('mongodb').MongoClient;
 const mongoActions = require('./mongoActions');
 const { validate_fields, validate} = require('./validate');
 
-const url = 'mongodb://mongo:27017';
+const url = 'mongodb://127.0.0.1:27017';
 
 const connect = () => {
   return mongoActions.connect(url);
@@ -11,7 +11,7 @@ const input = (collection, transaction) => {
   
   return new Promise((resolve, reject) => {
       var valid_results = validate_fields(transaction);
-      console.log(valid_results);
+      // console.log(valid_results);
       if (valid_results.status == 'failed') return reject(valid_results);
       
       if (transaction.type == 'find') {

@@ -4,7 +4,7 @@ var async = require('async');
 
 const mongoConnect = (url, callback) => {
     MongoClient.connect(url, {useNewUrlParser: true }, (err, connection) => {
-        console.log('connecting mongodb server');
+        // console.log('connecting mongodb server');
         if (!connection) setTimeout(() => {mongoConnect(url, callback);}, 1000);
         else callback(connection);
     });
