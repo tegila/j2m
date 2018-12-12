@@ -1,8 +1,7 @@
-const MongoClient = require('mongodb').MongoClient;
 const mongoActions = require('./mongoActions');
 const { validate_fields, validate} = require('./validate');
 
-const url = 'mongodb://127.0.0.1:27017';
+const url = `mongodb://${process.env.CI_GITLAB ? 'mongo': '127.0.0.1'}:27017`;
 
 const connect = () => {
   return mongoActions.connect(url);
