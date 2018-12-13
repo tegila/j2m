@@ -1,11 +1,13 @@
 var MongoClient = require('mongodb').MongoClient;
 var Logger = require('mongodb').Logger;
 var async = require('async');
+let trying = 1;
 
 const mongoConnect = (url, callback) => {
+    if(++trying > 9) return 0;
     MongoClient.connect(url, {useNewUrlParser: true }, (err, connection) => {
         // console.log('connecting mongodb server');
-        if (!connection) setTimeout(() => {mongoConnect(url, callback);}, 1000);
+        if (!connection) setTimeout(() => mongoConnect(url, callback), 1000);
         else callback(connection);
     });
 }

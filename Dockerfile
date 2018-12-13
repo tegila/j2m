@@ -17,6 +17,6 @@ COPY . .
 
 ENV DOCKER 1
 
-CMD [ "node", "test/index.js" ]
+CMD [ "yarn", "test" ]
 
 EXPOSE 3000

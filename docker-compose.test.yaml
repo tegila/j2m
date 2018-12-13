@@ -8,7 +8,6 @@ services:
       - "27017:27017"
   sut:
     image: j2m:latest
-    dockerfile: Dockerfile.test
     build: .
     links:
       - mongo

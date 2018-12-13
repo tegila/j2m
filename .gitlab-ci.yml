@@ -1,6 +1,7 @@
 .use-mongodb: &use-mongodb
   services:
-    - khezen/mongo:3.4
+    - name: khezen/mongo:3.4
+      alias: mongo
 
 before_script:
   - date
