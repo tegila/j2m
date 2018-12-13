@@ -1,7 +1,6 @@
 .use-mongodb: &use-mongodb
   services:
-    - name: khezen/mongo:3.4
-      alias: mongo
+    - khezen/mongo:3.4
 
 before_script:
   - date
@@ -16,8 +15,6 @@ test1:
   <<: *use-mongodb
   image: node:latest
   stage: test
-  variables:
-    CI_GITLAB: "true"
   cache:
     paths:
       - node_modules/
