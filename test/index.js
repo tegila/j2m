@@ -22,7 +22,7 @@ describe('create ops', () => {
       const item1 = queryBuilder()
         .database('app')
         .collection('Todos')
-        .insertOne({
+        .insert({
           title: 'temp List',
           quantity: 10,
           completed: true,
@@ -40,9 +40,7 @@ describe('create ops', () => {
           console.log('Error is occured', err);
         }).finally(done);
     } catch(err) {
-      conn.close(function () {
-        done(err);
-      });
+      conn.close(() => done(err));
     }
   });
 });
