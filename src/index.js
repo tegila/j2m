@@ -33,7 +33,7 @@ const close = () => db.close();
 
 const select_collection = (database, collection) => {
   return new Promise((resolve, reject) => {
-    console.log(database, collection);
+    // console.log(database, collection);
     if (db !== null) return resolve(db.db(database).collection(collection));
     connect(base_url)
       .then(connection =>
@@ -46,7 +46,7 @@ const select_collection = (database, collection) => {
 const exec = ({ database, collection, type, payload }) => {
   return new Promise((resolve, reject) => {
     select_collection(database, collection).then(db => {
-      console.log(type)
+      // console.log(type)
       runner[type].input(db, payload, resolve, reject);
     });
   });
