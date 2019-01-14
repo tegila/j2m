@@ -11,7 +11,7 @@
   "homepage": "https://github.com/tegila/j2m#readme",
   "scripts": {
     "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
-    "test": "mocha -b ./test/index.js"
+    "test": "mocha -b --recursive"
   },
   "repository": {
     "type": "git",

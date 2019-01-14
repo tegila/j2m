@@ -41,3 +41,6 @@ Keep it simple by only delivering information comming from json to the Native AP
 # Testing 
 
 `node test/index.js`
+
+# Docs 
+https://stackoverflow.com/questions/23948527/13-permission-denied-while-connecting-to-upstreamnginx
