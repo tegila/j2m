@@ -10,6 +10,12 @@ const base = queryBuilder()
   .database('app')
   .collection('Todos');
   
+const database_error_exit = () => {
+  console.log("database error exit");
+  j2m.close();
+  process.exit(1);
+};
+
 describe('CRUD Pattern', () => {
   it('should be able to insert a document', (done) => {
     const basic_insert = base.insert({
@@ -19,7 +25,7 @@ describe('CRUD Pattern', () => {
     j2m.exec(basic_insert).then((ret) => {
       // console.log(ret.ops);
       done();
-    }).catch(console.log)
+    }).catch(database_error_exit)
   });
   
   it('should be able to query a document', (done) => {
@@ -27,7 +33,7 @@ describe('CRUD Pattern', () => {
     j2m.exec(basic_find).then((ret) => {
       // console.log(ret);
       done();
-    }).catch(console.log)
+    }).catch(database_error_exit)
   });
 
   it('it should be able to remove a previous queries document', (done) => {
@@ -37,9 +43,14 @@ describe('CRUD Pattern', () => {
       // console.log(basic_removal);
       j2m.exec(basic_removal).then((ret) => {
         console.log(ret);
-        j2m.close();
         done();
-      }).catch(console.log);
-    }).catch(console.log);
-  })
+      }).catch(database_error_exit);
+    }).catch(database_error_exit);
+  });
+
+  after(function(done){
+    j2m.close();
+    done();
+  });
+
 });
