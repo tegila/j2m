@@ -9,7 +9,7 @@ let base_url = null;
 let db = null;
 
 const connect = url => {
-  console.log("connect");
+  console.log("connecting...");
   return new Promise((resolve, reject) => {
     MongoClient.connect(
       url,

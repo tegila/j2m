@@ -4,7 +4,7 @@ const should = chai.should(),
 const J2M = require('../src');
 const queryBuilder = require('../querybuilder');
 
-const j2m = J2M("mongodb://localhost:27017");
+const j2m = J2M(`mongodb://${process.env.DATABASE_URL || "localhost"}:27017`);
 
 const base = queryBuilder()
   .database('app')

@@ -3,6 +3,9 @@
     - name: mongo:latest
       alias: mongo
 
+variables:
+  DATABASE_URL: "mongo"
+  
 before_script:
   - date
 
