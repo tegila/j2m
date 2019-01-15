@@ -36,8 +36,28 @@ describe('CRUD Pattern', () => {
     }).catch(database_error_exit)
   });
 
-  it('it should be able to remove a previous queries document', (done) => {
+  it('it should be able to update a previous found document', (done) => {
     const basic_find = base.find({}).value();
+    j2m.exec(basic_find).then((ret) => {
+      const basic_update = base
+        .update(ret)
+        .with({
+          status: "crud done"
+        })
+        .value();
+      // console.log(basic_removal);
+      j2m.exec(basic_update).then((ret) => {
+        console.log(ret);
+        done();
+      }).catch(database_error_exit);
+    }).catch(database_error_exit);
+  });
+
+  it('it should be able to remove a previous found document', (done) => {
+    const basic_find = base
+      .find({status: "crud done"})
+      .value();
+
     j2m.exec(basic_find).then((ret) => {
       const basic_removal = base.remove(ret).value();
       // console.log(basic_removal);

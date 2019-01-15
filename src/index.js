@@ -2,6 +2,7 @@ var MongoClient = require("mongodb").MongoClient;
 const runner = {
   find: require("./find"),
   insert: require("./insert"),
+  update: require("./update"),
   remove: require("./remove")
 };
 
