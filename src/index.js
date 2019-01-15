@@ -1,7 +1,8 @@
 var MongoClient = require("mongodb").MongoClient;
 const runner = {
   find: require("./find"),
-  insert: require("./insert")
+  insert: require("./insert"),
+  remove: require("./remove")
 };
 
 let base_url = null;
