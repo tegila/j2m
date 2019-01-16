@@ -24,6 +24,7 @@ const connect = url => {
       },
       (err, datalink) => {
         db = datalink;
+        console.log(err);
         if (!err) return resolve(datalink);
         return reject(err);
       }
@@ -31,7 +32,10 @@ const connect = url => {
   });
 };
 
-const close = () => db.close();
+const close = () => {
+  db.close();
+  db = null;
+};
 
 const select_collection = (database, collection) => {
   return new Promise((resolve, reject) => {
@@ -65,4 +69,3 @@ const J2M = url => {
 };
 
 module.exports = J2M;
-
