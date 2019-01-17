@@ -1,13 +1,16 @@
 var MongoClient = require("mongodb").MongoClient;
-const runner = {
-  find: require("./find"),
-  insert: require("./insert"),
-  update: require("./update"),
-  remove: require("./remove")
-};
 
 let base_url = null;
 let db = null;
+const runners = [];
+
+const normalizedPath = require("path").join(__dirname, "actions");
+
+require("fs")
+  .readdirSync(normalizedPath)
+  .forEach(file => {
+    require("./actions/" + file)(runners);
+  });
 
 const connect = url => {
   console.log("connecting...");
@@ -52,8 +55,12 @@ const select_collection = (database, collection) => {
 const exec = ({ database, collection, type, payload }) => {
   return new Promise((resolve, reject) => {
     select_collection(database, collection).then(db => {
-      // console.log(type)
-      runner[type].input(db, payload, resolve, reject);
+      // console.log(type, payload.type);
+      runners.forEach(({ props, input }) => {
+        // console.log(props);
+        if (props.type === type && props.subtype === payload.type)
+          input(db, payload, resolve, reject);
+      });
     });
   });
 };
