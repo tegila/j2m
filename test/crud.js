@@ -85,5 +85,4 @@ describe("CRUD Pattern", () => {
       })
       .catch(database_error_exit);
   });
-
 });

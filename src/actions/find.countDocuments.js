@@ -1,11 +1,11 @@
 module.exports = (runners) => {
   runners.push({
     props: {
-      type: 'remove',
-      subtype: 'deleteOne'
+      type: 'find',
+      subtype: 'countDocuments'
     },
     input: (db, payload, resolve, reject) => {
-      db.deleteOne(payload.filter, (err, result) => {
+      db.countDocuments(payload.filter, (payload.limit, payload.skip, payload.hint, payload.maxTimeMS), (err, result) => {
         // console.log(result);
         if (err) return reject(err);
         resolve(result);
@@ -13,3 +13,4 @@ module.exports = (runners) => {
     }
   });
 }
+
