@@ -50,7 +50,8 @@ describe("Paginate Pattern", () => {
 
   it("it should be able to count", done => {
     const basic_find = base
-      .countDocuments({})
+      .find({})
+      .count()
       .value();
     j2m
       .exec(basic_find)
@@ -63,7 +64,7 @@ describe("Paginate Pattern", () => {
 
   it("should be able to limit a query", done => {
     const find_limit = base
-      .countDocuments({})
+      .find({})
       .limit(3)
       .value();
     j2m
@@ -77,7 +78,7 @@ describe("Paginate Pattern", () => {
 
   it("should be able to skip some documents", done => {
     const find_skip = base
-      .countDocuments({})
+      .find({})
       .skip(2)
       .value();
     j2m
