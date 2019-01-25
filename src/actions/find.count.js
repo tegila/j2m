@@ -2,7 +2,7 @@ module.exports = (runners) => {
   runners.push({
     props: {
       type: 'find',
-      subtype: 'countDocuments'
+      subtype: 'count'
     },
     input: (db, payload, resolve, reject) => {
       db.countDocuments(payload.filter, (payload.limit, payload.skip, payload.hint, payload.maxTimeMS), (err, result) => {
