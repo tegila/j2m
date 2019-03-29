@@ -1,6 +1,6 @@
 module.exports = {
   props: {
-    type: 'remove',
+    type: 'delete',
     subtype: 'deleteOne'
   },
   input: (db, payload, resolve, reject) => {

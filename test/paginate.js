@@ -10,7 +10,8 @@ const base = queryBuilder()
   .database("app")
   .collection("Todos");
 
-const database_error_exit = () => {
+const database_error_exit = (err) => {
+  console.log(err);
   console.log("database exit error");
   j2m.close();
   process.exit(1);

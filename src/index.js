@@ -13,11 +13,11 @@ require("fs")
     runners.push(require("./actions/" + file));
   });
 
-const connect = url => {
+const connect = () => {
   console.log("connecting...");
   return new Promise((resolve, reject) => {
     MongoClient.connect(
-      url,
+      base_url,
       {
         useNewUrlParser: true,
         autoReconnect: true,
@@ -37,7 +37,7 @@ const connect = url => {
 };
 
 const close = () => {
-  db.close();
+  return db.close();
   db = null;
 };
 
@@ -45,7 +45,7 @@ const select_collection = (database, collection) => {
   return new Promise((resolve, reject) => {
     // console.log(database, collection);
     if (db !== null) return resolve(db.db(database).collection(collection));
-    connect(base_url)
+    connect()
       .then(connection =>
         resolve(connection.db(database).collection(collection))
       )
@@ -82,3 +82,11 @@ const J2M = url => {
 };
 
 module.exports = J2M;
+
+process.on('SIGTERM', () => {
+  console.info('SIGTERM signal received.');
+  console.log('Closing mongodb server.');
+  db.close(() => {
+    console.log('mongodb server closed.');
+  });
+});
