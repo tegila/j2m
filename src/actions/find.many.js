@@ -1,18 +1,17 @@
 module.exports = {
   props: {
     type: "find",
-    subtype: "complex"
+    subtype: "findMany"
   },
-  input: (db, { filter, sort, skip, limit }, resolve, reject) => {
+  input: (db, { filter, limit, skip, sort }, resolve, reject) => {
     db.find(
       filter,
       {
-        sort,
         skip,
-        limit
+        limit,
+        sort
       },
       (err, result) => {
-        // console.log(result);
         if (err) return reject(err);
         resolve(result);
       }

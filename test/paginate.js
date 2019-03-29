@@ -2,7 +2,7 @@ const chai = require("chai");
 const should = chai.should(),
   expect = chai.expect;
 const J2M = require("../src");
-const queryBuilder = require("../querybuilder");
+const queryBuilder = require("../../querybuilder");
 
 const j2m = J2M(`mongodb://${process.env.DATABASE_URL || "localhost"}:27017`);
 
@@ -56,7 +56,7 @@ describe("Paginate Pattern", () => {
     j2m
       .exec(basic_find)
       .then(ret => {
-          console.log(ret);
+          // console.log(ret);
           done();
       })
       .catch(database_error_exit);

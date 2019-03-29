@@ -1,13 +1,12 @@
 module.exports = {
   props: {
     type: "find",
-    subtype: "complex"
+    subtype: "countDocuments"
   },
-  input: (db, { filter, sort, skip, limit }, resolve, reject) => {
-    db.find(
+  input: (db, { filter, skip, limit }, resolve, reject) => {
+    db.countDocuments(
       filter,
       {
-        sort,
         skip,
         limit
       },

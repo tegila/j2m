@@ -2,7 +2,7 @@ const chai = require("chai");
 const should = chai.should(),
   expect = chai.expect;
 const J2M = require("../src");
-const queryBuilder = require("../querybuilder");
+const queryBuilder = require("../../querybuilder");
 
 const j2m = J2M(`mongodb://${process.env.DATABASE_URL || "localhost"}:27017`);
 
@@ -10,7 +10,8 @@ const base = queryBuilder()
   .database("app")
   .collection("Todos");
 
-const database_error_exit = () => {
+const database_error_exit = err => {
+  console.log(err);
   console.log("database error exit");
   j2m.close();
   process.exit(1);
@@ -45,16 +46,22 @@ describe("CRUD Pattern", () => {
   });
 
   it("it should be able to update a previous found document", done => {
-    const basic_find = base.find({}).value();
+    const basic_find = base
+      .find({
+        status: "to_be_done"
+      })
+      .value();
+
     j2m
       .exec(basic_find)
       .then(ret => {
         const basic_update = base
           .update(ret)
           .with({
-            status: "crud done"
+            status: "crud_done"
           })
           .value();
+
         // console.log(basic_removal);
         j2m
           .exec(basic_update)
@@ -85,5 +92,4 @@ describe("CRUD Pattern", () => {
       })
       .catch(database_error_exit);
   });
-
 });

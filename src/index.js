@@ -4,12 +4,13 @@ let base_url = null;
 let db = null;
 const runners = [];
 
+// https://stackoverflow.com/questions/5364928/node-js-require-all-files-in-a-folder
 const normalizedPath = require("path").join(__dirname, "actions");
 
 require("fs")
   .readdirSync(normalizedPath)
   .forEach(file => {
-    require("./actions/" + file)(runners);
+    runners.push(require("./actions/" + file));
   });
 
 const connect = url => {
@@ -52,15 +53,20 @@ const select_collection = (database, collection) => {
   });
 };
 
-const exec = ({ database, collection, type, payload }) => {
+const exec = ({ database, collection, payload }) => {
   return new Promise((resolve, reject) => {
     select_collection(database, collection).then(db => {
       // console.log(type, payload.type);
-      runners.forEach(({ props, input }) => {
+      const found = runners.find(({ props }) => {
         // console.log(props);
-        if (props.type === type && props.subtype === payload.type)
-          input(db, payload, resolve, reject);
+        return (props.type === payload.type && props.subtype === payload.subtype)
       });
+      
+      if(found) {
+        found.input(db, payload, resolve, reject);
+      } else {
+        reject("action method not found");
+      }
     });
   });
 };
