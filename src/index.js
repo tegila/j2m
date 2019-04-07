@@ -53,9 +53,9 @@ const select_collection = (database, collection) => {
   });
 };
 
-const exec = ({ database, collection, payload }) => {
+const exec = (payload) => {
   return new Promise((resolve, reject) => {
-    select_collection(database, collection).then(db => {
+    select_collection(payload.database, payload.collection).then(db => {
       // console.log(type, payload.type);
       const found = runners.find(({ props }) => {
         // console.log(props);
