@@ -1,4 +1,4 @@
-const logger = process.env.DEBUG ? console.log : null;
+const logger = process.env.DEBUG ? console.log : () => null;
 
 var MongoClient = require("mongodb").MongoClient;
 

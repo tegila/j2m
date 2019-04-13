@@ -1,6 +1,6 @@
 {
   "name": "j2m",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "json to mongodb",
   "main": "src/index.js",
   "author1": "tegila",
