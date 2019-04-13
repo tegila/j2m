@@ -1,3 +1,5 @@
+const logger = process.env.DEBUG ? console.log : null;
+
 module.exports = {
   props: {
     type: 'insert',
@@ -5,7 +7,7 @@ module.exports = {
   },
   input: (db, payload, resolve, reject) => {
     db.insertOne(payload.data, (err, result) => {
-      // console.log(result);
+      logger(result);
       if (err) return reject(err);
       resolve(result);
     });

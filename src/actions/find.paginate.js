@@ -1,3 +1,5 @@
+const logger = process.env.DEBUG ? console.log : null;
+
 module.exports = {
   props: {
     type: "find",

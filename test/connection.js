@@ -1,3 +1,5 @@
+const logger = process.env.DEBUG ? console.log : null;
+
 const chai = require("chai");
 const should = chai.should(),
   expect = chai.expect;
@@ -6,7 +8,7 @@ const J2M = require("../src");
 const j2m = J2M(`mongodb://${process.env.DATABASE_URL || "localhost"}:27017`);
 
 const database_error_exit = () => {
-  console.log("database error exit");
+  logger("database error exit");
   j2m.close();
   process.exit(1);
 };

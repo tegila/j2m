@@ -1,3 +1,5 @@
+const logger = process.env.DEBUG ? console.log : null;
+
 var MongoClient = require("mongodb").MongoClient;
 
 let base_url = null;
@@ -14,7 +16,7 @@ require("fs")
   });
 
 const connect = () => {
-  console.log("connecting...");
+  logger("connecting...");
   return new Promise((resolve, reject) => {
     MongoClient.connect(
       base_url,
@@ -28,7 +30,7 @@ const connect = () => {
       },
       (err, datalink) => {
         db = datalink;
-        console.log(err);
+        logger(err);
         if (!err) return resolve(datalink);
         return reject(err);
       }
@@ -43,7 +45,7 @@ const close = () => {
 
 const select_collection = (database, collection) => {
   return new Promise((resolve, reject) => {
-    // console.log(database, collection);
+    // logger(database, collection);
     if (db !== null) return resolve(db.db(database).collection(collection));
     connect()
       .then(connection =>
@@ -56,9 +58,9 @@ const select_collection = (database, collection) => {
 const exec = (payload) => {
   return new Promise((resolve, reject) => {
     select_collection(payload.database, payload.collection).then(db => {
-      // console.log(type, payload.type);
+      // logger(type, payload.type);
       const found = runners.find(({ props }) => {
-        // console.log(props);
+        // logger(props);
         return (props.type === payload.type && props.subtype === payload.subtype)
       });
       
@@ -85,8 +87,8 @@ module.exports = J2M;
 
 process.on('SIGTERM', () => {
   console.info('SIGTERM signal received.');
-  console.log('Closing mongodb server.');
+  logger('Closing mongodb server.');
   db.close(() => {
-    console.log('mongodb server closed.');
+    logger('mongodb server closed.');
   });
 });

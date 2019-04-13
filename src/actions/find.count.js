@@ -1,3 +1,5 @@
+const logger = process.env.DEBUG ? console.log : null;
+
 module.exports = {
   props: {
     type: "find",
@@ -11,7 +13,7 @@ module.exports = {
         limit
       },
       (err, result) => {
-        // console.log(result);
+        logger(result);
         if (err) return reject(err);
         resolve(result);
       }

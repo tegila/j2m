@@ -1,8 +1,10 @@
+const logger = process.env.DEBUG ? console.log : null;
+
 const chai = require("chai");
 const should = chai.should(),
   expect = chai.expect;
 const J2M = require("../src");
-const queryBuilder = require("../../querybuilder");
+const queryBuilder = require("querybuilder");
 
 const j2m = J2M(`mongodb://${process.env.DATABASE_URL || "localhost"}:27017`);
 
@@ -11,8 +13,8 @@ const base = queryBuilder()
   .collection("Todos");
 
 const database_error_exit = (err) => {
-  console.log(err);
-  console.log("database exit error");
+  logger(err);
+  logger("database exit error");
   j2m.close();
   process.exit(1);
 };
@@ -43,7 +45,7 @@ describe("Paginate Pattern", () => {
     j2m
       .exec(insert_many)
       .then(ret => {
-        // console.log(ret.ops);
+        // logger(ret.ops);
         done();
       })
       .catch(database_error_exit);
@@ -57,7 +59,7 @@ describe("Paginate Pattern", () => {
     j2m
       .exec(basic_find)
       .then(ret => {
-          // console.log(ret);
+          // logger(ret);
           done();
       })
       .catch(database_error_exit);
@@ -71,7 +73,7 @@ describe("Paginate Pattern", () => {
     j2m
       .exec(find_limit)
       .then(ret => {
-        // console.log(ret);
+        // logger(ret);
         done();
       })
       .catch(database_error_exit);
@@ -85,7 +87,7 @@ describe("Paginate Pattern", () => {
     j2m
       .exec(find_skip)
       .then(ret => {
-        // console.log(ret);
+        // logger(ret);
         done();
       })
       .catch(database_error_exit);

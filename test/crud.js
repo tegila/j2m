@@ -1,3 +1,5 @@
+const logger = process.env.DEBUG ? console.log : null;
+
 const chai = require("chai");
 const should = chai.should(),
   expect = chai.expect;
@@ -11,8 +13,8 @@ const base = queryBuilder()
   .collection("Todos");
 
 const database_error_exit = err => {
-  console.log(err);
-  console.log("database error exit");
+  logger(err);
+  logger("database error exit");
   j2m.close();
   process.exit(1);
 };
@@ -28,7 +30,7 @@ describe("CRUD Pattern", () => {
     j2m
       .exec(basic_insert)
       .then(ret => {
-        // console.log(ret.ops);
+        // logger(ret.ops);
         done();
       })
       .catch(database_error_exit);
@@ -39,7 +41,7 @@ describe("CRUD Pattern", () => {
     j2m
       .exec(basic_find)
       .then(ret => {
-        // console.log(ret);
+        // logger(ret);
         done();
       })
       .catch(database_error_exit);
@@ -62,11 +64,11 @@ describe("CRUD Pattern", () => {
           })
           .value();
 
-        // console.log(basic_removal);
+        // logger(basic_removal);
         j2m
           .exec(basic_update)
           .then(ret => {
-            // console.log(ret);
+            // logger(ret);
             done();
           })
           .catch(database_error_exit);
@@ -81,11 +83,11 @@ describe("CRUD Pattern", () => {
       .exec(basic_find)
       .then(ret => {
         const basic_removal = base.remove(ret).value();
-        // console.log(basic_removal);
+        // logger(basic_removal);
         j2m
           .exec(basic_removal)
           .then(ret => {
-            // console.log(ret);
+            // logger(ret);
             done();
           })
           .catch(database_error_exit);
