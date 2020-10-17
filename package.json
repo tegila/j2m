@@ -24,18 +24,8 @@
     "node"
   ],
   "dependencies": {
-    "async": "^2.6.1",
-    "chai": "^4.2.0",
-    "mocha": "^5.2.0",
-    "mongodb": "^3.1.9",
+    "mongodb": "^3.6.2",
     "querybuilder": "tegila/querybuilder"
   },
-  "devDependencies": {
-    "@babel/cli": "^7.0.0",
-    "@babel/core": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
-    "@babel/register": "^7.0.0",
-    "es6-promise": "^4.2.4",
-    "rimraf": "^2.6.1"
-  }
+  "devDependencies": {}
 }
